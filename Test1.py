@@ -13,7 +13,7 @@ FEATURES = [
     "EmployeeID","Branch","Tenure","Salary","Department","JobSatisfaction",
     "WorkLifeBalance","CommuteDistance","MaritalStatus","Education",
     "PerformanceRating","TrainingHours","YearsSincePromotion",
-    "EnvironmentSatisfaction","ChurnLikelihood"
+    "EnvironmentSatisfaction"
 ]
 
 def to_excel_bytes(df: pd.DataFrame) -> bytes:
@@ -74,9 +74,15 @@ if st.button("Submit / Run Model"):
         if not pd.api.types.is_numeric_dtype(X[col]):
             X[col] = LabelEncoder().fit_transform(X[col].astype(str))
 
+    status_map = {
+      0: "Highly Likely to Churn",
+      1: "Moderately Likely to Churn",
+      2: "Slightly Likely to Churn"
+    }
+
     # Predict + add output column
-    df_out = df.copy()
-    df_out["Predictions"] = model.predict(X)
+    df_out = df.drop(columns=["ChurnLikelihood"]).copy()
+    df_out["Predictions"] = pd.Series(model.predict(X)).map(status_map)
 
     st.success("Done!")
     st.subheader("Output Preview")
