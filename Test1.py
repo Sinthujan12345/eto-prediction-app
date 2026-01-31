@@ -6,7 +6,6 @@ from io import BytesIO
 
 MODEL_PATH = "ETO Prediction Model.pkl"
 
-# ✅ Add your template file path (keep the file in the same folder as app.py)
 TEMPLATE_PATH = "Input Data Template.xlsx"
 
 FEATURES = [
@@ -22,14 +21,12 @@ def to_excel_bytes(df: pd.DataFrame) -> bytes:
         df.to_excel(writer, index=False)
     return buf.getvalue()
 
-# ✅ Read template as bytes
 def template_bytes(path: str) -> bytes:
     with open(path, "rb") as f:
         return f.read()
 
 st.title("ETO Prediction Web Application")
 
-# ✅ Template download section
 st.subheader("Step 1: Download the Excel Template")
 st.download_button(
     label="Download Input Excel Template",
@@ -94,3 +91,4 @@ if st.button("Submit / Run Model"):
         file_name="Output Data.xlsx",
         mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
     )
+
